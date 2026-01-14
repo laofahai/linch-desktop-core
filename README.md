@@ -121,15 +121,32 @@ pnpm dev:tauri    # 启动 playground 测试
 
 ### 3. 发布新版本
 
+项目使用 **Changesets + GitHub Actions** 自动发布：
+
 ```bash
-# 1. 记录变更
+# 1. 记录变更（在功能分支或 main 上）
 pnpm changeset
-# 选择要发布的包、版本类型、填写变更说明
+# 选择要发布的包、版本类型（patch/minor/major）、填写变更说明
 
-# 2. 更新版本号（自动同步 npm + rust + 模板）
-pnpm version
+# 2. 提交并推送
+git add .changeset/*.md
+git commit -m "chore: add changeset"
+git push
+```
 
-# 3. 发布到 npm 和 crates.io
+**自动发布流程**：
+
+1. 推送到 `main` 后，CI 会自动创建 **Release PR**（标题：`chore: version packages`）
+2. Release PR 包含版本号更新和 CHANGELOG 生成
+3. **合并 Release PR** 后，CI 自动发布到：
+   - npm: `@linch-tech/desktop-core`, `@linch-tech/create-desktop-app`
+   - crates.io: `linch_tech_desktop_core`
+4. 自动创建 Git Tag（如 `v0.2.0`）
+
+**手动发布**（仅在 CI 失败时使用）：
+
+```bash
+GITHUB_TOKEN=$(gh auth token) pnpm changeset version
 pnpm release
 ```
 
