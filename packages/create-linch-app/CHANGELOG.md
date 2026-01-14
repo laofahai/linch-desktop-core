@@ -1,11 +1,12 @@
 # @linch-tech/create-desktop-app
 
+## 0.2.0
+
 ## 0.1.9
 
 ### Patch Changes
 
 - feat: 添加 CI/CD 和 ESLint 模板配置
-
   - 添加 GitHub Actions 工作流模板 (ci.yml, release.yml)
   - 添加 ESLint 配置模板
   - 更新 package.json 脚本 (lint, type-check)
