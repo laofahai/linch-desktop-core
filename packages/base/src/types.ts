@@ -1,6 +1,6 @@
-import type { ReactNode, ComponentType } from 'react';
-import type { LucideIcon } from 'lucide-react';
-import type { Migration } from './lib/database';
+import type { ReactNode, ComponentType } from "react"
+import type { LucideIcon } from "lucide-react"
+import type { Migration } from "./lib/database"
 
 // ============================================================================
 // Core Config Types
@@ -10,52 +10,52 @@ export interface LinchDesktopConfig {
   /**
    * Brand configuration
    */
-  brand: BrandConfig;
+  brand: BrandConfig
 
   /**
    * Navigation items
    */
-  nav: NavItem[];
+  nav: NavItem[]
 
   /**
    * Feature toggles
    */
-  features?: FeaturesConfig;
+  features?: FeaturesConfig
 
   /**
    * Theme customization
    */
-  theme?: ThemeConfig;
+  theme?: ThemeConfig
 
   /**
    * Layout configuration
    */
-  layout?: LayoutConfig;
+  layout?: LayoutConfig
 
   /**
    * Slot injection
    */
-  slots?: SlotsConfig;
+  slots?: SlotsConfig
 
   /**
    * Component overrides
    */
-  components?: ComponentOverrides;
+  components?: ComponentOverrides
 
   /**
    * i18n configuration
    */
-  i18n?: I18nConfig;
+  i18n?: I18nConfig
 
   /**
    * Database configuration
    */
-  database?: DatabaseConfig;
+  database?: DatabaseConfig
 
   /**
    * Sentry configuration
    */
-  sentry?: SentryConfig;
+  sentry?: SentryConfig
 }
 
 // ============================================================================
@@ -66,17 +66,22 @@ export interface BrandConfig {
   /**
    * Application name (or i18n key)
    */
-  name: string;
+  name: string
 
   /**
-   * Logo component
+   * Logo component (priority over logoUrl)
    */
-  logo?: ComponentType<{ className?: string }>;
+  logo?: ComponentType<{ className?: string }>
+
+  /**
+   * Logo image URL (fallback when logo component is not provided)
+   */
+  logoUrl?: string
 
   /**
    * Version string to display
    */
-  version?: string;
+  version?: string
 }
 
 // ============================================================================
@@ -87,22 +92,22 @@ export interface NavItem {
   /**
    * Title (can be i18n key or plain text)
    */
-  title: string;
+  title: string
 
   /**
    * Route path
    */
-  path: string;
+  path: string
 
   /**
    * Icon component
    */
-  icon: LucideIcon | ComponentType<{ className?: string }>;
+  icon: LucideIcon | ComponentType<{ className?: string }>
 
   /**
    * Badge content (optional)
    */
-  badge?: string | number;
+  badge?: string | number
 }
 
 // ============================================================================
@@ -113,17 +118,17 @@ export interface FeaturesConfig {
   /**
    * Enable auto-updater (default: true)
    */
-  updater?: boolean;
+  updater?: boolean
 
   /**
    * Enable database (default: true)
    */
-  database?: boolean;
+  database?: boolean
 
   /**
    * Enable Sentry error reporting (default: false)
    */
-  sentry?: boolean;
+  sentry?: boolean
 }
 
 // ============================================================================
@@ -134,40 +139,40 @@ export interface ThemeConfig {
   /**
    * Color overrides
    */
-  colors?: Partial<ThemeColors>;
+  colors?: Partial<ThemeColors>
 
   /**
    * Border radius preset
    */
-  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+  radius?: "none" | "sm" | "md" | "lg" | "full"
 
   /**
    * Font family overrides
    */
   font?: {
-    sans?: string;
-    mono?: string;
-  };
+    sans?: string
+    mono?: string
+  }
 
   /**
    * Custom CSS variables
    */
-  cssVariables?: Record<string, string>;
+  cssVariables?: Record<string, string>
 }
 
 export interface ThemeColors {
-  primary: string;
-  secondary: string;
-  background: string;
-  foreground: string;
-  muted: string;
-  mutedForeground: string;
-  border: string;
-  ring: string;
-  accent: string;
-  accentForeground: string;
-  destructive: string;
-  destructiveForeground: string;
+  primary: string
+  secondary: string
+  background: string
+  foreground: string
+  muted: string
+  mutedForeground: string
+  border: string
+  ring: string
+  accent: string
+  accentForeground: string
+  destructive: string
+  destructiveForeground: string
 }
 
 // ============================================================================
@@ -179,18 +184,18 @@ export interface LayoutConfig {
    * Sidebar configuration
    */
   sidebar?: {
-    width?: number;
-    position?: 'left' | 'right';
-  };
+    width?: number
+    position?: "left" | "right"
+  }
 
   /**
    * Title bar configuration
    */
   titleBar?: {
-    height?: number;
-    showWindowControls?: boolean;
-    draggable?: boolean;
-  };
+    height?: number
+    showWindowControls?: boolean
+    draggable?: boolean
+  }
 }
 
 // ============================================================================
@@ -202,28 +207,28 @@ export interface SlotsConfig {
    * Title bar slots
    */
   titleBar?: {
-    left?: ReactNode;
-    center?: ReactNode;
-    right?: ReactNode;
-  };
+    left?: ReactNode
+    center?: ReactNode
+    right?: ReactNode
+  }
 
   /**
    * Sidebar slots
    */
   sidebar?: {
-    header?: ReactNode;
-    footer?: ReactNode;
-    beforeNav?: ReactNode;
-    afterNav?: ReactNode;
-  };
+    header?: ReactNode
+    footer?: ReactNode
+    beforeNav?: ReactNode
+    afterNav?: ReactNode
+  }
 
   /**
    * Shell slots
    */
   shell?: {
-    beforeContent?: ReactNode;
-    afterContent?: ReactNode;
-  };
+    beforeContent?: ReactNode
+    afterContent?: ReactNode
+  }
 }
 
 // ============================================================================
@@ -234,17 +239,17 @@ export interface ComponentOverrides {
   /**
    * Override Shell component
    */
-  Shell?: ComponentType<ShellProps>;
+  Shell?: ComponentType<ShellProps>
 
   /**
    * Override TitleBar component
    */
-  TitleBar?: ComponentType<TitleBarProps>;
+  TitleBar?: ComponentType<TitleBarProps>
 
   /**
    * Override NavItem component
    */
-  NavItem?: ComponentType<NavItemComponentProps>;
+  NavItem?: ComponentType<NavItemComponentProps>
 }
 
 // ============================================================================
@@ -252,22 +257,22 @@ export interface ComponentOverrides {
 // ============================================================================
 
 export interface ShellProps {
-  children?: ReactNode;
-  className?: string;
+  children?: ReactNode
+  className?: string
   /**
    * If true, don't render Outlet (useful when you want to render children directly)
    */
-  noOutlet?: boolean;
+  noOutlet?: boolean
 }
 
 export interface TitleBarProps {
-  className?: string;
+  className?: string
 }
 
 export interface NavItemComponentProps {
-  item: NavItem;
-  isActive: boolean;
-  onClick?: () => void;
+  item: NavItem
+  isActive: boolean
+  onClick?: () => void
 }
 
 // ============================================================================
@@ -278,17 +283,17 @@ export interface I18nConfig {
   /**
    * Default language
    */
-  defaultLanguage?: string;
+  defaultLanguage?: string
 
   /**
    * Supported languages
    */
-  supportedLanguages?: string[];
+  supportedLanguages?: string[]
 
   /**
    * Additional translation resources (will be merged with base)
    */
-  resources?: Record<string, Record<string, unknown>>;
+  resources?: Record<string, Record<string, unknown>>
 }
 
 // ============================================================================
@@ -299,12 +304,12 @@ export interface DatabaseConfig {
   /**
    * Database name (default: 'app.db')
    */
-  name?: string;
+  name?: string
 
   /**
    * Additional migrations (will run after base migrations)
    */
-  migrations?: Migration[];
+  migrations?: Migration[]
 }
 
 // ============================================================================
@@ -315,10 +320,10 @@ export interface SentryConfig {
   /**
    * Sentry DSN
    */
-  dsn?: string;
+  dsn?: string
 
   /**
    * Traces sample rate (0-1)
    */
-  tracesSampleRate?: number;
+  tracesSampleRate?: number
 }

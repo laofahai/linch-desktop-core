@@ -1,15 +1,17 @@
-import { Inbox, Calculator } from 'lucide-react';
-import type { LinchDesktopConfig } from '@linch-tech/desktop-core';
+import { Inbox, Calculator } from "lucide-react"
+import type { LinchDesktopConfig } from "@linch-tech/desktop-core"
+import { PlaygroundLogo } from "./components/PlaygroundLogo"
 
 export const config: Partial<LinchDesktopConfig> = {
   brand: {
-    name: 'app.name',
+    name: "app.name",
     version: `v${__APP_VERSION__}`,
+    logo: PlaygroundLogo,
   },
 
   nav: [
-    { title: 'app.dashboard', path: '/', icon: Inbox },
-    { title: 'app.demo', path: '/demo', icon: Calculator },
+    { title: "app.dashboard", path: "/", icon: Inbox },
+    { title: "app.demo", path: "/demo", icon: Calculator },
   ],
 
   features: {
@@ -25,23 +27,23 @@ export const config: Partial<LinchDesktopConfig> = {
   },
 
   i18n: {
-    defaultLanguage: 'zh',
-    supportedLanguages: ['zh', 'en'],
+    defaultLanguage: "zh",
+    supportedLanguages: ["zh", "en"],
     resources: {
       en: {
         app: {
-          name: 'Playground',
-          dashboard: 'Dashboard',
-          demo: 'Demo',
+          name: "Playground",
+          dashboard: "Dashboard",
+          demo: "Demo",
         },
       },
       zh: {
         app: {
-          name: 'Playground',
-          dashboard: '仪表盘',
-          demo: '演示',
+          name: "Playground",
+          dashboard: "仪表盘",
+          demo: "演示",
         },
       },
     },
   },
-};
+}

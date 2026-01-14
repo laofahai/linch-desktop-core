@@ -2209,7 +2209,7 @@ dependencies = [
 
 [[package]]
 name = "linch_tech_desktop_core"
-version = "0.1.7"
+version = "0.1.9"
 dependencies = [
  "sentry",
  "serde",
