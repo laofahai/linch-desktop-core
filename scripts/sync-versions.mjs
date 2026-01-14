@@ -16,7 +16,7 @@ const basePkg = JSON.parse(
   fs.readFileSync(path.join(ROOT, 'packages/base/package.json'), 'utf-8')
 );
 const version = basePkg.version;
-const repoUrl = 'https://github.com/laofahai/linch-pc-base';
+const repoUrl = 'https://github.com/laofahai/linch-desktop-core';
 
 console.log(`\n📦 Syncing version ${version} to Rust crates and templates...\n`);
 

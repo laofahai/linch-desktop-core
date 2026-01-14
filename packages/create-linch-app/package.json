@@ -5,7 +5,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laofahai/linch-pc-base"
+    "url": "https://github.com/laofahai/linch-desktop-core"
   },
   "bin": {
     "create-linch-desktop-app": "./dist/index.js"

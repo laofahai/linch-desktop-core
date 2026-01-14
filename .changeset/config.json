@@ -1,10 +1,8 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "laofahai/linch-pc-base" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "laofahai/linch-desktop-core" }],
   "commit": true,
-  "fixed": [
-    ["@linch-tech/desktop-core", "@linch-tech/create-desktop-app"]
-  ],
+  "fixed": [["@linch-tech/desktop-core", "@linch-tech/create-desktop-app"]],
   "linked": [],
   "access": "public",
   "baseBranch": "main",

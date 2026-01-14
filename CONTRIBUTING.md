@@ -22,7 +22,7 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 
 In short, when you submit code changes to the project, you assign the copyright on the code to us (along with the original copyright holder), but the code is still licensed under the MIT License.
 
-## Report bugs using Github's [issue tracker](https://github.com/linch-tech/linch-pc-base/issues)
+## Report bugs using Github's [issue tracker](https://github.com/linch-tech/linch-desktop-core/issues)
 
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](); it's that easy!
 
@@ -34,6 +34,7 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
     - Rust (latest stable)
 
 2.  **Install**:
+
     ```bash
     pnpm install
     ```

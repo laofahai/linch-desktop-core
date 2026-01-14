@@ -6,7 +6,7 @@ authors = ["Linch Tech"]
 edition = "2021"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/laofahai/linch-pc-base"
+repository = "https://github.com/laofahai/linch-desktop-core"
 
 [lib]
 name = "linch_tech_desktop_core"

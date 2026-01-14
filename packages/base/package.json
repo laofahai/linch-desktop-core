@@ -4,7 +4,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laofahai/linch-pc-base"
+    "url": "https://github.com/laofahai/linch-desktop-core"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

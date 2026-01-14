@@ -16,6 +16,7 @@ pnpm tauri:dev
 ```
 
 或使用非交互模式：
+
 ```bash
 npx @linch-tech/create-desktop-app my-app -y -d "My App" -i "com.company.myapp"
 ```
@@ -27,36 +28,36 @@ npx @linch-tech/create-desktop-app my-app -y -d "My App" -i "com.company.myapp"
 ```typescript
 export const config: Partial<LinchDesktopConfig> = {
   brand: {
-    name: 'app.name',        // i18n key
-    version: 'v1.0.0',
+    name: "app.name", // i18n key
+    version: "v1.0.0",
   },
-  nav: [
-    { title: 'nav.home', path: '/', icon: HomeIcon },
-  ],
+  nav: [{ title: "nav.home", path: "/", icon: HomeIcon }],
   features: {
     updater: true,
     database: true,
     sentry: false,
   },
   i18n: {
-    defaultLanguage: 'zh',
-    supportedLanguages: ['zh', 'en'],
+    defaultLanguage: "zh",
+    supportedLanguages: ["zh", "en"],
     resources: {
       // 应用专属翻译（会和基座翻译合并）
-      zh: { app: { name: '我的应用' }, nav: { home: '首页' } },
-      en: { app: { name: 'My App' }, nav: { home: 'Home' } },
+      zh: { app: { name: "我的应用" }, nav: { home: "首页" } },
+      en: { app: { name: "My App" }, nav: { home: "Home" } },
     },
   },
-};
+}
 ```
 
 ### 3. i18n 语言包说明
 
 基座提供的翻译（自动加载）：
+
 - `common.*` - 通用文本
 - `settings.*` - 设置页面
 
 应用自定义翻译（在 config.i18n.resources 中添加）：
+
 - 会与基座翻译**深度合并**
 - 可覆盖基座的翻译
 - `supportedLanguages` 会用于语言切换器展示
@@ -73,16 +74,20 @@ VITE_API_BASE_URL=
 ### 5. 升级基座
 
 **前端部分**：
+
 ```bash
 pnpm update @linch-tech/desktop-core
 ```
 
 **Rust 部分**：
 编辑 `src-tauri/Cargo.toml`，更新版本号：
+
 ```toml
 linch_tech_desktop_core = "0.1"
 ```
+
 然后重新构建：
+
 ```bash
 cargo update && pnpm tauri:build
 ```
@@ -106,8 +111,8 @@ cargo update && pnpm tauri:build
 ### 2. 本地开发
 
 ```bash
-git clone https://github.com/linch-tech/linch-pc-base.git
-cd linch-pc-base
+git clone https://github.com/linch-tech/linch-desktop-core.git
+cd linch-desktop-core
 pnpm install
 pnpm dev:tauri    # 启动 playground 测试
 ```
@@ -132,29 +137,29 @@ pnpm release
 
 自动发布需要在 GitHub repo settings 中配置以下 secrets：
 
-| Secret | 说明 |
-|--------|------|
-| `NPM_TOKEN` | npm 发布 token（需要 automation 权限） |
-| `CARGO_REGISTRY_TOKEN` | crates.io 发布 token |
+| Secret                 | 说明                                   |
+| ---------------------- | -------------------------------------- |
+| `NPM_TOKEN`            | npm 发布 token（需要 automation 权限） |
+| `CARGO_REGISTRY_TOKEN` | crates.io 发布 token                   |
 
 ### 5. 版本号说明
 
-| 包 | 位置 | 同步方式 |
-|---|---|---|
-| @linch-tech/desktop-core | packages/base/package.json | changesets 自动 |
-| @linch-tech/create-desktop-app | packages/create-linch-app/package.json | changesets 自动 |
-| linch_tech_desktop_core | packages/tauri/Cargo.toml | sync-versions 脚本 |
-| 模板依赖版本 | packages/create-linch-app/templates/ | sync-versions 脚本 |
+| 包                             | 位置                                   | 同步方式           |
+| ------------------------------ | -------------------------------------- | ------------------ |
+| @linch-tech/desktop-core       | packages/base/package.json             | changesets 自动    |
+| @linch-tech/create-desktop-app | packages/create-linch-app/package.json | changesets 自动    |
+| linch_tech_desktop_core        | packages/tauri/Cargo.toml              | sync-versions 脚本 |
+| 模板依赖版本                   | packages/create-linch-app/templates/   | sync-versions 脚本 |
 
 ---
 
 ## 三、包说明
 
-| 包名 | 类型 | 说明 |
-|------|------|------|
-| `@linch-tech/desktop-core` | npm | 前端组件、hooks、工具库 |
-| `linch_tech_desktop_core` | Rust crate | Tauri 插件初始化 |
-| `@linch-tech/create-desktop-app` | npm (CLI) | 脚手架，创建新项目 |
+| 包名                             | 类型       | 说明                    |
+| -------------------------------- | ---------- | ----------------------- |
+| `@linch-tech/desktop-core`       | npm        | 前端组件、hooks、工具库 |
+| `linch_tech_desktop_core`        | Rust crate | Tauri 插件初始化        |
+| `@linch-tech/create-desktop-app` | npm (CLI)  | 脚手架，创建新项目      |
 
 详细 API 文档见 [packages/base/README.md](./packages/base/README.md)
 
