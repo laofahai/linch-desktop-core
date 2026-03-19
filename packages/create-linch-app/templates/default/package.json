@@ -17,7 +17,7 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@linch-tech/desktop-core": "^0.2.0",
+    "@linch-tech/desktop-core": "^0.3.0",
     "@tauri-apps/api": "^2.9.1",
     "@tauri-apps/plugin-dialog": "^2.4.2",
     "@tauri-apps/plugin-opener": "^2.5.2",
