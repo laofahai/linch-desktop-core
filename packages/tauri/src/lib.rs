@@ -15,8 +15,8 @@
 //! }
 //! ```
 
-use std::sync::OnceLock;
 use sentry::ClientInitGuard;
+use std::sync::OnceLock;
 use tauri::Wry;
 
 // Re-export commonly used items
