@@ -15,6 +15,7 @@
 //! }
 //! ```
 
+use std::sync::OnceLock;
 use sentry::ClientInitGuard;
 use tauri::Wry;
 
@@ -46,9 +47,9 @@ impl LinchConfig {
         self
     }
 
-    /// Set Sentry sample rate
+    /// Set Sentry sample rate (clamped to 0.0 - 1.0)
     pub fn sentry_sample_rate(mut self, rate: f32) -> Self {
-        self.sentry_sample_rate = rate;
+        self.sentry_sample_rate = rate.clamp(0.0, 1.0);
         self
     }
 
@@ -62,7 +63,7 @@ impl LinchConfig {
 }
 
 /// Sentry guard that must be kept alive for the lifetime of the application
-static mut SENTRY_GUARD: Option<ClientInitGuard> = None;
+static SENTRY_GUARD: OnceLock<Option<ClientInitGuard>> = OnceLock::new();
 
 /// Initialize Sentry for error reporting
 fn init_sentry(config: &LinchConfig) -> Option<ClientInitGuard> {
@@ -111,9 +112,7 @@ pub trait LinchDesktopExt {
 impl LinchDesktopExt for tauri::Builder<Wry> {
     fn with_linch_desktop(self, config: LinchConfig) -> Self {
         // Initialize Sentry (store guard globally to keep it alive)
-        unsafe {
-            SENTRY_GUARD = init_sentry(&config);
-        }
+        let _ = SENTRY_GUARD.set(init_sentry(&config));
 
         self.with_linch_plugins()
     }

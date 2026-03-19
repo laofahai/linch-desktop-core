@@ -1,10 +1,10 @@
-import { createContext, useContext, type ReactNode } from 'react';
-import type { LinchDesktopConfig } from '../types';
+import { createContext, useContext, type ReactNode } from "react"
+import type { LinchDesktopConfig } from "../types"
 
 // Default config values
 const defaultConfig: LinchDesktopConfig = {
   brand: {
-    name: 'App',
+    name: "App",
   },
   nav: [],
   features: {
@@ -15,7 +15,7 @@ const defaultConfig: LinchDesktopConfig = {
   layout: {
     sidebar: {
       width: 180,
-      position: 'left',
+      position: "left",
     },
     titleBar: {
       height: 48,
@@ -23,58 +23,67 @@ const defaultConfig: LinchDesktopConfig = {
       draggable: true,
     },
   },
-};
+}
+
+// Deep merge utility
+function deepMerge<T extends Record<string, unknown>>(
+  target: T,
+  source: Record<string, unknown>
+): T {
+  const result = { ...target } as T
+  for (const key of Object.keys(source)) {
+    const sourceValue = source[key]
+    const targetValue = (target as Record<string, unknown>)[key]
+    if (
+      sourceValue &&
+      typeof sourceValue === "object" &&
+      !Array.isArray(sourceValue) &&
+      targetValue &&
+      typeof targetValue === "object" &&
+      !Array.isArray(targetValue)
+    ) {
+      ;(result as Record<string, unknown>)[key] = deepMerge(
+        targetValue as Record<string, unknown>,
+        sourceValue as Record<string, unknown>
+      )
+    } else if (sourceValue !== undefined) {
+      ;(result as Record<string, unknown>)[key] = sourceValue
+    }
+  }
+  return result
+}
 
 // Merge configs deeply
 function mergeConfig(
   base: LinchDesktopConfig,
   override: Partial<LinchDesktopConfig>
 ): LinchDesktopConfig {
-  return {
-    ...base,
-    ...override,
-    brand: { ...base.brand, ...override.brand },
-    features: { ...base.features, ...override.features },
-    theme: { ...base.theme, ...override.theme },
-    layout: {
-      sidebar: { ...base.layout?.sidebar, ...override.layout?.sidebar },
-      titleBar: { ...base.layout?.titleBar, ...override.layout?.titleBar },
-    },
-    slots: { ...base.slots, ...override.slots },
-    components: { ...base.components, ...override.components },
-    i18n: { ...base.i18n, ...override.i18n },
-    database: { ...base.database, ...override.database },
-    sentry: { ...base.sentry, ...override.sentry },
-  };
+  return deepMerge(base, override as Record<string, unknown>) as LinchDesktopConfig
 }
 
 // Context
-const ConfigContext = createContext<LinchDesktopConfig>(defaultConfig);
+const ConfigContext = createContext<LinchDesktopConfig>(defaultConfig)
 
 // Provider
 export interface ConfigProviderProps {
-  config: Partial<LinchDesktopConfig>;
-  children: ReactNode;
+  config: Partial<LinchDesktopConfig>
+  children: ReactNode
 }
 
 export function ConfigProvider({ config, children }: ConfigProviderProps) {
-  const mergedConfig = mergeConfig(defaultConfig, config);
+  const mergedConfig = mergeConfig(defaultConfig, config)
 
-  return (
-    <ConfigContext.Provider value={mergedConfig}>
-      {children}
-    </ConfigContext.Provider>
-  );
+  return <ConfigContext.Provider value={mergedConfig}>{children}</ConfigContext.Provider>
 }
 
 // Hook
 export function useConfig(): LinchDesktopConfig {
-  const context = useContext(ConfigContext);
+  const context = useContext(ConfigContext)
   if (!context) {
-    throw new Error('useConfig must be used within a ConfigProvider');
+    throw new Error("useConfig must be used within a ConfigProvider")
   }
-  return context;
+  return context
 }
 
 // Export default config for reference
-export { defaultConfig };
+export { defaultConfig }

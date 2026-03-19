@@ -1,48 +1,61 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { Button } from '../ui/button';
-import { AlertTriangle, RotateCcw, Home } from 'lucide-react';
-import { logger } from '../../lib/logger';
+import { Component, ErrorInfo, ReactNode } from "react"
+import { Button } from "../ui/button"
+import { AlertTriangle, RotateCcw, Home } from "lucide-react"
+import { logger } from "../../lib/logger"
 
 interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
+  children: ReactNode
+  fallback?: ReactNode
 }
 
 interface State {
-  hasError: boolean;
-  error: Error | null;
+  hasError: boolean
+  error: Error | null
 }
 
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false, error: null };
+    super(props)
+    this.state = { hasError: false, error: null }
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    logger.error('ErrorBoundary caught an error', { error, componentStack: errorInfo?.componentStack });
+    logger.error("ErrorBoundary caught an error", {
+      error,
+      componentStack: errorInfo?.componentStack,
+    })
   }
 
   handleReload = (): void => {
-    window.location.reload();
-  };
+    this.setState({ hasError: false, error: null }, () => {
+      window.location.reload()
+    })
+  }
 
   handleGoHome = (): void => {
-    window.location.href = '/';
-  };
+    this.setState({ hasError: false, error: null }, () => {
+      // Use history API for SPA-friendly navigation, fallback to location
+      try {
+        window.history.pushState(null, "", "/")
+        window.dispatchEvent(new PopStateEvent("popstate"))
+      } catch {
+        window.location.href = "/"
+      }
+    })
+  }
 
   handleReset = (): void => {
-    this.setState({ hasError: false, error: null });
-  };
+    this.setState({ hasError: false, error: null })
+  }
 
   render(): ReactNode {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        return this.props.fallback;
+        return this.props.fallback
       }
 
       return (
@@ -55,9 +68,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
 
             <div className="space-y-2">
-              <h1 className="text-xl font-semibold text-foreground">
-                Something went wrong
-              </h1>
+              <h1 className="text-xl font-semibold text-foreground">Something went wrong</h1>
               <p className="text-sm text-muted-foreground">
                 An unexpected error occurred. Please try reloading the page.
               </p>
@@ -83,9 +94,9 @@ export class ErrorBoundary extends Component<Props, State> {
             </div>
           </div>
         </div>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }

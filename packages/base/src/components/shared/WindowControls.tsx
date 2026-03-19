@@ -1,61 +1,68 @@
-import { useState, useEffect } from "react";
-import { Minus, Square, X, Maximize2 } from "lucide-react";
-import { Button } from "../ui/button";
-import * as tauri from "../../lib/tauri";
-import { logger } from "../../lib/logger";
+import { useState, useEffect, useRef, useCallback } from "react"
+import { Minus, Square, X, Maximize2 } from "lucide-react"
+import { Button } from "../ui/button"
+import * as tauri from "../../lib/tauri"
+import { logger } from "../../lib/logger"
 
 export function WindowControls() {
-  const [isMaximized, setIsMaximized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false)
+  const resizeTimerRef = useRef<ReturnType<typeof setTimeout>>(null)
+
+  const checkMaximized = useCallback(async () => {
+    try {
+      if (window.__TAURI__) {
+        const maximized = await tauri.isMaximized()
+        setIsMaximized(maximized)
+      }
+    } catch (e) {
+      logger.error("Failed to check maximized state", { error: e })
+    }
+  }, [])
 
   useEffect(() => {
-    const checkMaximized = async () => {
-      try {
-        if (window.__TAURI__) {
-          const maximized = await tauri.isMaximized();
-          setIsMaximized(maximized);
-        }
-      } catch (e) {
-        logger.error("Failed to check maximized state", { error: e });
-      }
-    };
-
-    checkMaximized();
+    checkMaximized()
 
     const handleResize = () => {
-      checkMaximized();
-    };
-    window.addEventListener("resize", handleResize);
+      if (resizeTimerRef.current) {
+        clearTimeout(resizeTimerRef.current)
+      }
+      resizeTimerRef.current = setTimeout(checkMaximized, 100)
+    }
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+      window.removeEventListener("resize", handleResize)
+      if (resizeTimerRef.current) {
+        clearTimeout(resizeTimerRef.current)
+      }
+    }
+  }, [checkMaximized])
 
   const handleMinimize = async () => {
     try {
-      await tauri.minimizeWindow();
+      await tauri.minimizeWindow()
     } catch (e) {
-      logger.error("Failed to minimize window", { error: e });
+      logger.error("Failed to minimize window", { error: e })
     }
-  };
+  }
 
   const handleToggleMaximize = async () => {
     try {
-      await tauri.toggleMaximize();
-      const maximized = await tauri.isMaximized();
-      setIsMaximized(maximized);
+      await tauri.toggleMaximize()
+      const maximized = await tauri.isMaximized()
+      setIsMaximized(maximized)
     } catch (e) {
-      logger.error("Failed to toggle maximize", { error: e });
+      logger.error("Failed to toggle maximize", { error: e })
     }
-  };
+  }
 
   const handleClose = async () => {
     try {
-      await tauri.closeWindow();
+      await tauri.closeWindow()
     } catch (e) {
-      logger.error("Failed to close window", { error: e });
+      logger.error("Failed to close window", { error: e })
     }
-  };
+  }
 
   return (
     <div className="flex items-center">
@@ -88,5 +95,5 @@ export function WindowControls() {
         <X className="h-3 w-3 text-muted-foreground/60 group-hover:text-destructive transition-colors" />
       </Button>
     </div>
-  );
+  )
 }

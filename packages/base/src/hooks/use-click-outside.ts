@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, RefObject } from 'react';
+import { useEffect, useRef, useCallback, RefObject } from "react"
 
 /**
  * Hook that detects clicks outside of the specified element
@@ -23,38 +23,38 @@ export function useClickOutside<T extends HTMLElement = HTMLElement>(
   handler: (event: MouseEvent | TouchEvent) => void,
   enabled = true
 ): RefObject<T | null> {
-  const ref = useRef<T>(null);
-  const handlerRef = useRef(handler);
+  const ref = useRef<T>(null)
+  const handlerRef = useRef(handler)
 
   // Update handler ref when handler changes
   useEffect(() => {
-    handlerRef.current = handler;
-  }, [handler]);
+    handlerRef.current = handler
+  }, [handler])
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return
 
     const listener = (event: MouseEvent | TouchEvent) => {
-      const el = ref.current;
+      const el = ref.current
 
       // Do nothing if clicking ref's element or its descendants
       if (!el || el.contains(event.target as Node)) {
-        return;
+        return
       }
 
-      handlerRef.current(event);
-    };
+      handlerRef.current(event)
+    }
 
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
+    document.addEventListener("mousedown", listener)
+    document.addEventListener("touchstart", listener)
 
     return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [enabled]);
+      document.removeEventListener("mousedown", listener)
+      document.removeEventListener("touchstart", listener)
+    }
+  }, [enabled])
 
-  return ref;
+  return ref
 }
 
 /**
@@ -82,52 +82,49 @@ export function useClickOutsideMultiple<T extends HTMLElement = HTMLElement>(
   handler: (event: MouseEvent | TouchEvent) => void,
   enabled = true
 ): {
-  refs: RefObject<T[]>;
-  addRef: (el: T | null) => void;
+  refs: RefObject<T[]>
+  addRef: (el: T | null) => void
 } {
-  const refs = useRef<T[]>([]);
-  const handlerRef = useRef(handler);
+  const refs = useRef<T[]>([])
+  const handlerRef = useRef(handler)
 
   // Update handler ref when handler changes
   useEffect(() => {
-    handlerRef.current = handler;
-  }, [handler]);
+    handlerRef.current = handler
+  }, [handler])
 
   const addRef = useCallback((el: T | null) => {
     if (el && !refs.current.includes(el)) {
-      refs.current.push(el);
+      refs.current.push(el)
     }
-  }, []);
+    // Clean up removed elements (ref callback passes null on unmount)
+    if (el === null) {
+      refs.current = refs.current.filter((ref) => document.body.contains(ref))
+    }
+  }, [])
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return
 
     const listener = (event: MouseEvent | TouchEvent) => {
       // Check if click is inside any of the refs
-      const isInside = refs.current.some(
-        (el) => el && el.contains(event.target as Node)
-      );
+      const isInside = refs.current.some((el) => el && el.contains(event.target as Node))
 
       if (!isInside) {
-        handlerRef.current(event);
+        handlerRef.current(event)
       }
-    };
+    }
 
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
+    document.addEventListener("mousedown", listener)
+    document.addEventListener("touchstart", listener)
 
     return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [enabled]);
+      document.removeEventListener("mousedown", listener)
+      document.removeEventListener("touchstart", listener)
+    }
+  }, [enabled])
 
-  // Clear refs on each render cycle
-  useEffect(() => {
-    refs.current = [];
-  });
-
-  return { refs, addRef };
+  return { refs, addRef }
 }
 
 /**
@@ -141,31 +138,28 @@ export function useClickOutsideMultiple<T extends HTMLElement = HTMLElement>(
  * useEscapeKey(() => setIsOpen(false), isOpen);
  * ```
  */
-export function useEscapeKey(
-  handler: (event: KeyboardEvent) => void,
-  enabled = true
-): void {
-  const handlerRef = useRef(handler);
+export function useEscapeKey(handler: (event: KeyboardEvent) => void, enabled = true): void {
+  const handlerRef = useRef(handler)
 
   useEffect(() => {
-    handlerRef.current = handler;
-  }, [handler]);
+    handlerRef.current = handler
+  }, [handler])
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return
 
     const listener = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handlerRef.current(event);
+      if (event.key === "Escape") {
+        handlerRef.current(event)
       }
-    };
+    }
 
-    document.addEventListener('keydown', listener);
+    document.addEventListener("keydown", listener)
 
     return () => {
-      document.removeEventListener('keydown', listener);
-    };
-  }, [enabled]);
+      document.removeEventListener("keydown", listener)
+    }
+  }, [enabled])
 }
 
 /**
@@ -191,8 +185,8 @@ export function useClickOutsideOrEscape<T extends HTMLElement = HTMLElement>(
   handler: (event: MouseEvent | TouchEvent | KeyboardEvent) => void,
   enabled = true
 ): RefObject<T | null> {
-  const ref = useClickOutside<T>(handler, enabled);
-  useEscapeKey(handler, enabled);
+  const ref = useClickOutside<T>(handler, enabled)
+  useEscapeKey(handler, enabled)
 
-  return ref;
+  return ref
 }

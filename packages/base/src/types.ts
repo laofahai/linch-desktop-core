@@ -291,6 +291,12 @@ export interface I18nConfig {
   supportedLanguages?: string[]
 
   /**
+   * Language display labels (e.g., { en: 'English', zh: '中文', ja: '日本語' })
+   * Used by LanguageSwitcher. Falls back to language code if not provided.
+   */
+  languageLabels?: Record<string, string>
+
+  /**
    * Additional translation resources (will be merged with base)
    */
   resources?: Record<string, Record<string, unknown>>

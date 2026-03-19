@@ -1,55 +1,52 @@
-import { useTranslation } from "react-i18next";
-import { Languages } from "lucide-react";
-import { Button } from "../ui/button";
+import { useTranslation } from "react-i18next"
+import { Languages } from "lucide-react"
+import { Button } from "../ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { cn } from "../../lib/utils";
-import { useConfig } from "../../context/config";
+} from "../ui/dropdown-menu"
+import { cn } from "../../lib/utils"
+import { useConfig } from "../../context/config"
 
 interface LanguageSwitcherProps {
-  variant?: "icon" | "full";
-  size?: "sm" | "default";
-  className?: string;
+  variant?: "icon" | "full"
+  size?: "sm" | "default"
+  className?: string
 }
 
-const defaultLanguages = [
-  { code: 'en', label: 'English' },
-  { code: 'zh', label: '中文' },
-] as const;
-
-const languageLabels: Record<string, string> = Object.fromEntries(
-  defaultLanguages.map((lang) => [lang.code, lang.label])
-);
+const defaultLanguageLabels: Record<string, string> = {
+  en: "English",
+  zh: "中文",
+}
 
 export function LanguageSwitcher({
   variant = "icon",
   size = "default",
   className,
 }: LanguageSwitcherProps) {
-  const { i18n } = useTranslation();
-  const config = useConfig();
+  const { i18n } = useTranslation()
+  const config = useConfig()
 
-  const supportedLanguages = config.i18n?.supportedLanguages;
+  const configLabels = config.i18n?.languageLabels
+  const languageLabels = { ...defaultLanguageLabels, ...configLabels }
+
+  const supportedLanguages = config.i18n?.supportedLanguages
   const languageCodes =
     supportedLanguages && supportedLanguages.length > 0
       ? supportedLanguages
-      : defaultLanguages.map((lang) => lang.code);
+      : Object.keys(languageLabels)
   const languageOptions = Array.from(new Set(languageCodes)).map((code) => ({
     code,
     label: languageLabels[code] ?? code,
-  }));
+  }))
 
   const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
+    i18n.changeLanguage(lng)
+  }
 
-  const currentLanguage = languageOptions.find(
-    (l) => i18n.language.startsWith(l.code)
-  );
+  const currentLanguage = languageOptions.find((l) => i18n.language.startsWith(l.code))
 
   if (variant === "full") {
     return (
@@ -65,7 +62,7 @@ export function LanguageSwitcher({
           </Button>
         ))}
       </div>
-    );
+    )
   }
 
   return (
@@ -87,14 +84,12 @@ export function LanguageSwitcher({
           <DropdownMenuItem
             key={lang.code}
             onClick={() => changeLanguage(lang.code)}
-            className={cn(
-              currentLanguage?.code === lang.code && "bg-accent"
-            )}
+            className={cn(currentLanguage?.code === lang.code && "bg-accent")}
           >
             {lang.label}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
