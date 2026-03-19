@@ -3,6 +3,19 @@ import type { LucideIcon } from "lucide-react"
 import type { Migration } from "./lib/database"
 
 // ============================================================================
+// Navigation Adapter
+// ============================================================================
+
+export interface NavigationAdapter {
+  Link: ComponentType<{
+    to: string
+    className?: string | ((props: { isActive: boolean }) => string)
+    children: ReactNode | ((props: { isActive: boolean }) => ReactNode)
+  }>
+  useNavigate: () => (path: string) => void
+}
+
+// ============================================================================
 // Core Config Types
 // ============================================================================
 
@@ -56,6 +69,12 @@ export interface LinchDesktopConfig {
    * Sentry configuration
    */
   sentry?: SentryConfig
+
+  /**
+   * Navigation adapter (default: react-router-dom)
+   * Allows swapping out the routing library while keeping react-router as fallback
+   */
+  navigation?: NavigationAdapter
 }
 
 // ============================================================================

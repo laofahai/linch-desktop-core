@@ -20,6 +20,7 @@ export type {
   I18nConfig,
   DatabaseConfig,
   SentryConfig,
+  NavigationAdapter,
 } from "./types"
 
 // Provider
@@ -92,6 +93,8 @@ export { WindowControls } from "./components/shared/WindowControls"
 // Components - Pages
 export { SettingsPage } from "./components/pages/SettingsPage"
 export type { SettingsPageProps } from "./components/pages/SettingsPage"
+export { UpdateButton } from "./components/pages/UpdateButton"
+export type { UpdateButtonProps } from "./components/pages/UpdateButton"
 
 // Components - Providers
 export { DatabaseProvider, useDatabase } from "./components/providers/DatabaseProvider"
@@ -116,6 +119,13 @@ export {
   useEscapeKey,
   useClickOutsideOrEscape,
 } from "./hooks/use-click-outside"
+
+// Hooks - Desktop
+export { useGlobalShortcut } from "./hooks/use-global-shortcut"
+export { useFileDrop } from "./hooks/use-file-drop"
+export { useNotification } from "./hooks/use-notification"
+export { useWindowState } from "./hooks/use-window-state"
+export { useDirtyState } from "./hooks/use-dirty-state"
 
 // Lib - Database
 export {
@@ -152,8 +162,8 @@ export {
 export type { UpdateInfo, UpdateProgress, UpdateStatus } from "./lib/updater"
 
 // Lib - Logger
-export { logger } from "./lib/logger"
-export type { LogLevel, LogEntry, LogHandler } from "./lib/logger"
+export { logger, addFileHandler, flushLogs, formatLogEntry, FileLogHandler } from "./lib/logger"
+export type { LogLevel, LogEntry, LogHandler, FileLogHandlerOptions } from "./lib/logger"
 
 // Lib - Sentry
 export { initSentry, captureError, setUser, addBreadcrumb, Sentry } from "./lib/sentry"
@@ -182,6 +192,20 @@ export {
   baseResources,
 } from "./i18n/config"
 export { default as i18n } from "./i18n/config"
+
+// Lib - Window Manager
+export {
+  createWindow,
+  getWindow,
+  getAllWindows,
+  closeWindowByLabel,
+  sendToWindow,
+  onWindowEvent,
+} from "./lib/window-manager"
+export type { WindowOptions } from "./lib/window-manager"
+
+// Hooks - Window Communication
+export { useWindowEvent, useBroadcast } from "./hooks/use-window-communication"
 
 // Version Check
 export { CORE_VERSION, checkCoreUpdate, logUpdateNotice } from "./lib/version-check"
