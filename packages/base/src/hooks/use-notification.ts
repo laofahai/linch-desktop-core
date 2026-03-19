@@ -38,7 +38,7 @@ export function useNotification(): UseNotificationReturn {
 
   // Check permission state on mount
   useEffect(() => {
-    if (typeof window === "undefined" || !(window as Record<string, unknown>).__TAURI__) {
+    if (typeof window === "undefined" || !window.__TAURI__) {
       return
     }
 
@@ -68,7 +68,7 @@ export function useNotification(): UseNotificationReturn {
   }, [])
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
-    if (typeof window === "undefined" || !(window as Record<string, unknown>).__TAURI__) {
+    if (typeof window === "undefined" || !window.__TAURI__) {
       return false
     }
 
@@ -87,7 +87,7 @@ export function useNotification(): UseNotificationReturn {
   }, [])
 
   const notify = useCallback(async (title: string, body?: string, icon?: string): Promise<void> => {
-    if (typeof window === "undefined" || !(window as Record<string, unknown>).__TAURI__) {
+    if (typeof window === "undefined" || !window.__TAURI__) {
       return
     }
 

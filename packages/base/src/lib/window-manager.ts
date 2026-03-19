@@ -17,7 +17,7 @@ export interface WindowOptions {
 }
 
 function isTauri(): boolean {
-  return typeof window !== "undefined" && !!(window as Record<string, unknown>).__TAURI__
+  return typeof window !== "undefined" && !!window.__TAURI__
 }
 
 /**

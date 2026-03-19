@@ -32,7 +32,7 @@ export function useGlobalShortcut(shortcut: string, handler: () => void, enabled
     if (!enabled) return
 
     // Check for Tauri environment
-    if (typeof window === "undefined" || !(window as Record<string, unknown>).__TAURI__) {
+    if (typeof window === "undefined" || !window.__TAURI__) {
       return
     }
 

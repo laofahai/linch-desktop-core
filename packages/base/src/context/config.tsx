@@ -26,14 +26,14 @@ const defaultConfig: LinchDesktopConfig = {
 }
 
 // Deep merge utility
-function deepMerge<T extends Record<string, unknown>>(
-  target: T,
+function deepMerge(
+  target: Record<string, unknown>,
   source: Record<string, unknown>
-): T {
-  const result = { ...target } as T
+): Record<string, unknown> {
+  const result: Record<string, unknown> = { ...target }
   for (const key of Object.keys(source)) {
     const sourceValue = source[key]
-    const targetValue = (target as Record<string, unknown>)[key]
+    const targetValue = target[key]
     if (
       sourceValue &&
       typeof sourceValue === "object" &&
@@ -42,12 +42,12 @@ function deepMerge<T extends Record<string, unknown>>(
       typeof targetValue === "object" &&
       !Array.isArray(targetValue)
     ) {
-      ;(result as Record<string, unknown>)[key] = deepMerge(
+      result[key] = deepMerge(
         targetValue as Record<string, unknown>,
         sourceValue as Record<string, unknown>
       )
     } else if (sourceValue !== undefined) {
-      ;(result as Record<string, unknown>)[key] = sourceValue
+      result[key] = sourceValue
     }
   }
   return result
@@ -58,7 +58,10 @@ function mergeConfig(
   base: LinchDesktopConfig,
   override: Partial<LinchDesktopConfig>
 ): LinchDesktopConfig {
-  return deepMerge(base, override as Record<string, unknown>) as LinchDesktopConfig
+  return deepMerge(
+    base as unknown as Record<string, unknown>,
+    override as unknown as Record<string, unknown>
+  ) as unknown as LinchDesktopConfig
 }
 
 // Context

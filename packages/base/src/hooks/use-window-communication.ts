@@ -24,7 +24,7 @@ export function useWindowEvent<T = unknown>(event: string, handler: (payload: T)
   }, [handler])
 
   useEffect(() => {
-    if (typeof window === "undefined" || !(window as Record<string, unknown>).__TAURI__) {
+    if (typeof window === "undefined" || !window.__TAURI__) {
       return
     }
 
@@ -76,7 +76,7 @@ export function useBroadcast(): {
   broadcast: (event: string, payload: unknown) => Promise<void>
 } {
   const broadcast = async (event: string, payload: unknown): Promise<void> => {
-    if (typeof window === "undefined" || !(window as Record<string, unknown>).__TAURI__) {
+    if (typeof window === "undefined" || !window.__TAURI__) {
       return
     }
 

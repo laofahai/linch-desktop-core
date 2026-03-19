@@ -62,7 +62,7 @@ export function useWindowState(storageKey: string = STORAGE_KEY): UseWindowState
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const isTauri = useCallback(() => {
-    return typeof window !== "undefined" && !!(window as Record<string, unknown>).__TAURI__
+    return typeof window !== "undefined" && !!window.__TAURI__
   }, [])
 
   const readStoredState = useCallback((): StoredWindowState | null => {
