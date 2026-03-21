@@ -1,4 +1,4 @@
-# Linch Desktop Base
+# Linch Desktop Core
 
 Tauri v2 + React 19 桌面应用基座框架。
 
@@ -40,8 +40,9 @@ export const config: Partial<LinchDesktopConfig> = {
   i18n: {
     defaultLanguage: "zh",
     supportedLanguages: ["zh", "en"],
+    languageLabels: { zh: "中文", en: "English" },
     resources: {
-      // 应用专属翻译（会和基座翻译合并）
+      // 应用专属翻译（会和基座翻译深度合并）
       zh: { app: { name: "我的应用" }, nav: { home: "首页" } },
       en: { app: { name: "My App" }, nav: { home: "Home" } },
     },
@@ -49,7 +50,66 @@ export const config: Partial<LinchDesktopConfig> = {
 }
 ```
 
-### 3. i18n 语言包说明
+### 3. 可用 Hooks
+
+| Hook | 说明 |
+| ---- | ---- |
+| `useTheme` | 主题切换（亮色/暗色/跟随系统） |
+| `useUpdater` | 自动更新检查、下载、安装 |
+| `useDatabaseInit` / `useSetting` / `useAppState` | SQLite 数据库操作 |
+| `useGlobalShortcut` | 全局键盘快捷键注册 |
+| `useFileDrop` | 文件拖放处理 |
+| `useNotification` | 桌面原生通知 |
+| `useWindowState` | 窗口位置/大小持久化 |
+| `useDirtyState` | 脏状态检测（未保存提醒） |
+| `useWindowEvent` / `useBroadcast` | 多窗口间通信 |
+| `useClickOutside` / `useEscapeKey` | 点击外部/ESC 检测 |
+| `useDebounce` / `useThrottle` | 防抖/节流 |
+| `useLocalStorage` | localStorage 状态持久化 |
+| `useAsync` / `useFetch` | 异步操作管理 |
+
+### 4. 多窗口管理
+
+```typescript
+import { createWindow, sendToWindow, useWindowEvent } from '@linch-tech/desktop-core';
+
+// 创建新窗口
+await createWindow('editor', { url: '/editor', width: 800, height: 600 });
+
+// 窗口间通信
+await sendToWindow('editor', 'file-opened', { path: '/data/file.txt' });
+
+// 监听事件
+useWindowEvent<{ path: string }>('file-opened', (payload) => {
+  console.log('File opened:', payload.path);
+});
+```
+
+### 5. 日志持久化
+
+```typescript
+import { addFileHandler, logger } from '@linch-tech/desktop-core';
+
+// 启用文件日志（写入 {appDataDir}/logs/app.log，自动轮转）
+addFileHandler({ maxFileSize: 5 * 1024 * 1024, maxFiles: 3 });
+
+logger.info('App started');
+```
+
+### 6. 自定义路由适配器
+
+Shell 默认使用 react-router-dom，可通过 `NavigationAdapter` 替换：
+
+```typescript
+const config: Partial<LinchDesktopConfig> = {
+  navigation: {
+    Link: MyCustomLink,
+    useNavigate: useMyNavigate,
+  },
+}
+```
+
+### 7. i18n 语言包说明
 
 基座提供的翻译（自动加载）：
 
@@ -61,17 +121,19 @@ export const config: Partial<LinchDesktopConfig> = {
 - 会与基座翻译**深度合并**
 - 可覆盖基座的翻译
 - `supportedLanguages` 会用于语言切换器展示
+- `languageLabels` 可自定义语言名称显示
 
-### 4. 环境变量（可选）
+### 8. 环境变量（可选）
 
 在项目根目录添加 `.env`：
 
 ```
 VITE_SENTRY_DSN=
 VITE_API_BASE_URL=
+VITE_PORT=1450
 ```
 
-### 5. 升级基座
+### 9. 升级基座
 
 **前端部分**：
 
@@ -83,7 +145,7 @@ pnpm update @linch-tech/desktop-core
 编辑 `src-tauri/Cargo.toml`，更新版本号：
 
 ```toml
-linch_tech_desktop_core = "0.1"
+linch_tech_desktop_core = "0.3"
 ```
 
 然后重新构建：
@@ -111,7 +173,7 @@ cargo update && pnpm tauri:build
 ### 2. 本地开发
 
 ```bash
-git clone https://github.com/linch-tech/linch-desktop-core.git
+git clone https://github.com/laofahai/linch-desktop-core.git
 cd linch-desktop-core
 pnpm install
 pnpm dev:tauri    # 启动 playground 测试
@@ -141,7 +203,7 @@ git push
 3. **合并 Release PR** 后，CI 自动发布到：
    - npm: `@linch-tech/desktop-core`, `@linch-tech/create-desktop-app`
    - crates.io: `linch_tech_desktop_core`
-4. 自动创建 Git Tag（如 `v0.2.0`）
+4. 自动创建 Git Tag（如 `v0.3.0`）
 
 **手动发布**（仅在 CI 失败时使用）：
 
@@ -186,8 +248,10 @@ pnpm release
 
 - **前端**: React 19, TypeScript, Tailwind CSS 4, shadcn/ui
 - **桌面**: Tauri 2, Rust
-- **国际化**: i18next（基座 + 应用语言包合并）
+- **国际化**: i18next（基座 + 应用语言包深度合并）
 - **数据库**: SQLite + 迁移系统
+- **日志**: 控制台 + 文件持久化（自动轮转）
+- **多窗口**: 窗口管理 + IPC 通信
 - **版本管理**: Changesets
 
 ## License
